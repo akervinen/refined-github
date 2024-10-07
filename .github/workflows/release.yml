@@ -47,7 +47,7 @@ jobs:
   Chrome:
     if: needs.Version.outputs.created
     needs: Version
-    name: Submit (Chrome)
+    name: Sign (Chrome)
     environment: Chrome
     runs-on: ubuntu-latest
     steps:
@@ -80,11 +80,12 @@ jobs:
       - name: Upload crx artifact
         uses: actions/upload-artifact@v4
         with:
+          name: signed
           path: "build/${{ env.PROJECT_NAME }}-${{ needs.Version.outputs.version }}.crx"
   Firefox:
     if: needs.Version.outputs.created
     needs: Version
-    name: Submit (Firefox)
+    name: Sign (Firefox)
     environment: Firefox
     runs-on: ubuntu-latest
     steps:
@@ -102,7 +103,7 @@ jobs:
         id: load-credentials
         uses: 1password/load-secrets-action@v2
         with:
-          export-env: false
+          export-env: true
         env:
           API_KEY: "op://CI/Firefox Addon Dev/username"
           API_SECRET: "op://CI/Firefox Addon Dev/credential"
@@ -111,5 +112,5 @@ jobs:
         run: npx web-ext@8 sign --channel unlisted
         working-directory: artifact
         env:
-          WEB_EXT_API_KEY: ${{ steps.load-credentials.outputs.API_KEY }}
-          WEB_EXT_API_SECRET: ${{ steps.load-credentials.outputs.API_SECRET }}
+          WEB_EXT_API_KEY: ${{ env.API_KEY }}
+          WEB_EXT_API_SECRET: ${{ env.API_SECRET }}
