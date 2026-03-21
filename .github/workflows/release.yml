@@ -53,6 +53,8 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - uses: actions/download-artifact@v8
+        with:
+          path: artifact
       - id: packExtensionDir
         uses: cardinalby/webext-buildtools-pack-extension-dir-action@v1
         with:
@@ -87,6 +89,8 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - uses: actions/download-artifact@v8
+        with:
+          path: artifact
       - name: Configure 1Password Service Account
         uses: 1password/load-secrets-action/configure@v3
         with:
